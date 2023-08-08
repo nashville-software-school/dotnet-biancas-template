@@ -10,7 +10,7 @@ public class UserProfile
     public string LastName { get; set; }
     public string Address { get; set; }
 
-    [NotMapped]
+    [NotMapped] // not mapped means that EF Core won't create column for this property in the db
     public string Email { get; set; }
     [NotMapped]
     public string UserName { get; set; }
