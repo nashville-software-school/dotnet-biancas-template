@@ -17,10 +17,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
     {
         options.Cookie.Name = "BiancasLoginCookie";
-        if (!builder.Environment.IsDevelopment())
-        {
-            options.Cookie.SameSite = SameSiteMode.Strict; // in production API requests will be same-site 
-        }
+        options.Cookie.SameSite = SameSiteMode.Strict;
         options.Cookie.HttpOnly = true; //The cookie cannot be accessed through JS (protects against XSS)
         options.Cookie.MaxAge = new TimeSpan(7, 0, 0, 0); // cookie expires in a week regardless of activity
         options.SlidingExpiration = true; // extend the cookie lifetime with activity up to 7 days.

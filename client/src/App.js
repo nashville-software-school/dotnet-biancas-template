@@ -14,6 +14,7 @@ function App() {
   const [loggedInUser, setLoggedInUser] = useState();
 
   useEffect(() => {
+    // user will be null if unauthenticated
     tryGetLoggedInUser().then((user) => {
       setLoggedInUser(user);
     });
