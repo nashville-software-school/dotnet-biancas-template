@@ -7,7 +7,13 @@ export const login = (email, password) => {
     headers: {
       Authorization: `Basic ${btoa(`${email}:${password}`)}`,
     },
-  }).then(() => fetch(_apiUrl + "/me").then((res) => res.json()));
+  }).then((res) => {
+    if (res.status !== 200) {
+      return Promise.resolve(null);
+    } else {
+      return tryGetLoggedInUser();
+    }
+  });
 };
 
 export const logout = () => {
