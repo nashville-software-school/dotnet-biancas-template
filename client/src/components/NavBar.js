@@ -14,7 +14,7 @@ import {
 import { logout } from "../managers/authManager";
 
 export default function NavBar({ loggedInUser, setLoggedInUser }) {
-  const [inventory, setInventory] = useState({ count: 0 });
+  const [inventory, setInventory] = useState(0);
   const [open, setOpen] = useState(false);
 
   const toggleNavbar = () => setOpen(!open);
@@ -64,7 +64,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
               </Nav>
             </Collapse>
             <NavbarText style={{ marginRight: "4px" }}>
-              Bikes in Garage: {inventory.count}
+              Bikes in Garage: {inventory}
             </NavbarText>
             <Button
               color="primary"
