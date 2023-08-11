@@ -29,7 +29,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            string encodedCreds = authHeader.Substring("Basic ".Length).Trim();
+            string encodedCreds = authHeader.Substring(6).Trim();
             string creds = Encoding
             .GetEncoding("iso-8859-1")
             .GetString(Convert.FromBase64String(encodedCreds));
