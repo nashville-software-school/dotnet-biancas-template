@@ -3,9 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using BiancasBikes.Data;
 using BiancasBikes.Models;
-using BiancasBikes.Models.DTOs;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace BiancasBikes.Controllers;
 
