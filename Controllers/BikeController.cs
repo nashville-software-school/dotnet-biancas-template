@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using BiancasBikes.Data;
 using BiancasBikes.Models;
@@ -20,7 +21,28 @@ public class BikeController : ControllerBase
     [Authorize]
     public IActionResult Get()
     {
-        return Ok(_dbContext.Bikes.ToList());
+        return Ok(_dbContext.Bikes.Include(b => b.Owner).ToList());
     }
+
+    [HttpGet("{id}")]
+    [Authorize]
+    public IActionResult GetById(int id)
+    {
+        Bike bike = _dbContext
+            .Bikes
+            .Include(b => b.Owner)
+            .Include(b => b.BikeType)
+            .Include(b => b.WorkOrders)
+            .Where(b => b.Id == id)
+            .SingleOrDefault();
+
+        if (bike == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(bike);
+    }
+
 
 }
