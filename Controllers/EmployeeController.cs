@@ -16,7 +16,7 @@ public class UserProfileController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public IActionResult Get()
     {
         return Ok(_dbContext.UserProfiles.ToList());
