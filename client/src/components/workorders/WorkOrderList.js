@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { Button, Input, Table } from "reactstrap";
-import { getIncompleteWorkOrders } from "../../managers/workOrderManager";
+import {
+  getIncompleteWorkOrders,
+  updateWorkOrder,
+} from "../../managers/workOrderManager";
 import { Link } from "react-router-dom";
+import { getUserProfiles } from "../../managers/userProfileManager";
 
 export default function WorkOrderList({ loggedInUser }) {
   const [workOrders, setWorkOrders] = useState([]);
@@ -9,10 +13,15 @@ export default function WorkOrderList({ loggedInUser }) {
 
   useEffect(() => {
     getIncompleteWorkOrders().then(setWorkOrders);
+    getUserProfiles().then(setMechanics);
   }, []);
 
-  const assignMechanic = (workOrderId, mechanicId) => {
-    console.log(`Assigned ${mechanicId} to ${workOrderId}`);
+  const assignMechanic = (workOrder, mechanicId) => {
+    const clone = structuredClone(workOrder);
+    clone.userProfileId = mechanicId || null;
+    updateWorkOrder(clone).then(() => {
+      getIncompleteWorkOrders().then(setWorkOrders);
+    });
   };
 
   const completeWorkOrder = (workOrderId) => {
@@ -44,32 +53,30 @@ export default function WorkOrderList({ loggedInUser }) {
               <td>{wo.description}</td>
               <td>{new Date(wo.dateInitiated).toLocaleDateString()}</td>
               <td>
-                {wo.userProfile
-                  ? `${wo.userProfile.firstName} ${wo.userProfile.lastName}`
-                  : "unassigned"}
+                <Input
+                  type="select"
+                  onChange={(e) => {
+                    assignMechanic(wo, parseInt(e.target.value));
+                  }}
+                  value={wo.userProfileId || 0}
+                >
+                  <option value="0">Choose mechanic</option>
+                  {mechanics.map((m) => (
+                    <option
+                      key={m.id}
+                      value={m.id}
+                    >{`${m.firstName} ${m.lastName}`}</option>
+                  ))}
+                </Input>
               </td>
               <td>
-                {wo.userProfile ? (
+                {wo.userProfile && (
                   <Button
                     onClick={() => completeWorkOrder(wo.id)}
                     color="success"
                   >
                     Mark as Complete
                   </Button>
-                ) : (
-                  <Input
-                    type="select"
-                    onChange={(e) => {
-                      assignMechanic(wo.id, parseInt(e.target.value));
-                    }}
-                  >
-                    <option value="0">Choose mechanic</option>
-                    {mechanics.map((m) => (
-                      <option
-                        value={m.id}
-                      >{`${m.firstName} ${m.lastName}`}</option>
-                    ))}
-                  </Input>
                 )}
               </td>
             </tr>
