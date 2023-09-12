@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using BiancasBikes.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace BiancasBikes.Controllers;
 
@@ -19,7 +20,10 @@ public class BikeController : ControllerBase
     [Authorize]
     public IActionResult Get()
     {
-        return Ok(_dbContext.Bikes.ToList());
+        return Ok(_dbContext
+        .Bikes
+        .Include(b => b.Owner)
+        .ToList());
     }
 
 }
