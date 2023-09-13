@@ -20,10 +20,7 @@ public class BikeController : ControllerBase
     [Authorize]
     public IActionResult Get()
     {
-        return Ok(_dbContext
-        .Bikes
-        .Include(b => b.Owner)
-        .ToList());
+        return Ok(_dbContext.Bikes.ToList());
     }
 
 }
