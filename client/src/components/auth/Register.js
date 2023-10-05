@@ -13,6 +13,7 @@ export default function Register({ setLoggedInUser }) {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [passwordMismatch, setPasswordMismatch] = useState();
+  const [registrationFailure, setRegistrationFailure] = useState(false);
 
   const navigate = useNavigate();
 
@@ -31,8 +32,12 @@ export default function Register({ setLoggedInUser }) {
         password,
       };
       register(newUser).then((user) => {
-        setLoggedInUser(user);
-        navigate("/");
+        if (user) {
+          setLoggedInUser(user);
+          navigate("/");
+        } else {
+          setRegistrationFailure(true);
+        }
       });
     }
   };
@@ -115,6 +120,9 @@ export default function Register({ setLoggedInUser }) {
         />
         <FormFeedback>Passwords do not match!</FormFeedback>
       </FormGroup>
+      <p style={{ color: "red" }} hidden={!registrationFailure}>
+        Registration Failure
+      </p>
       <Button
         color="primary"
         onClick={handleSubmit}
