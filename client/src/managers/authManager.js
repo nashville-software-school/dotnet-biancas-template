@@ -35,5 +35,5 @@ export const register = (userProfile) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(userProfile),
-  }).then(() => fetch(_apiUrl + "/me").then((res) => res.json()));
+  }).then(() => tryGetLoggedInUser());
 };

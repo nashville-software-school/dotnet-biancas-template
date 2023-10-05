@@ -45,6 +45,7 @@ builder.Services.AddIdentityCore<IdentityUser>(config =>
                 config.Password.RequireLowercase = false;
                 config.Password.RequireNonAlphanumeric = false;
                 config.Password.RequireUppercase = false;
+                config.User.RequireUniqueEmail = true;
             })
     .AddRoles<IdentityRole>()  //add the role service.  
     .AddEntityFrameworkStores<BiancasBikesDbContext>();
