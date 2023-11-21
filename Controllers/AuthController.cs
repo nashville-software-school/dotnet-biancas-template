@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Text;
 using BiancasBikes.Models;
+using BiancasBikes.Models.DTOs;
 using BiancasBikes.Data;
 
 namespace BiancasBikes.Controllers;
@@ -101,16 +102,25 @@ public class AuthController : ControllerBase
         var roles = User.FindAll(ClaimTypes.Role).Select(r => r.Value).ToList();
         if (profile != null)
         {
-            profile.UserName = User.FindFirstValue(ClaimTypes.Name);
-            profile.Email = User.FindFirstValue(ClaimTypes.Email);
-            profile.Roles = roles;
-            return Ok(profile);
+            var userDto = new UserProfileDTO
+            {
+                Id = profile.Id,
+                FirstName = profile.FirstName,
+                LastName = profile.LastName,
+                Address = profile.Address,
+                IdentityUserId = identityUserId,
+                UserName = User.FindFirstValue(ClaimTypes.Name),
+                Email = User.FindFirstValue(ClaimTypes.Email),
+                Roles = roles
+            };
+
+            return Ok(userDto);
         }
         return NotFound();
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register(Registration registration)
+    public async Task<IActionResult> Register(RegistrationDTO registration)
     {
         var user = new IdentityUser
         {

@@ -1,6 +1,6 @@
-namespace BiancasBikes.Models;
+namespace BiancasBikes.Models.DTOs;
 
-public class Registration
+public class RegistrationDTO
 {
     public string Email { get; set; }
     public string Password { get; set; }
