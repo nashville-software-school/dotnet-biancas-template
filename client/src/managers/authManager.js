@@ -1,12 +1,12 @@
-const _apiUrl = "/api/auth";
+const _apiUrl = "/api/userprofile";
 
 export const login = (email, password) => {
-  return fetch(_apiUrl + "/login", {
+  return fetch(`${_apiUrl}/login`, {
     method: "POST",
-    credentials: "same-origin",
     headers: {
-      Authorization: `Basic ${btoa(`${email}:${password}`)}`,
+      "Content-Type": "application/json",
     },
+    body: JSON.stringify({ email, password }),
   }).then((res) => {
     if (res.status !== 200) {
       return Promise.resolve(null);
@@ -17,18 +17,17 @@ export const login = (email, password) => {
 };
 
 export const logout = () => {
-  return fetch(_apiUrl + "/logout");
+  return fetch(`${_apiUrl}/logout`);
 };
 
 export const tryGetLoggedInUser = () => {
-  return fetch(_apiUrl + "/me").then((res) => {
+  return fetch(`${_apiUrl}/me`).then((res) => {
     return res.status === 401 ? Promise.resolve(null) : res.json();
   });
 };
 
 export const register = (userProfile) => {
-  userProfile.password = btoa(userProfile.password);
-  return fetch(_apiUrl + "/register", {
+  return fetch(`${_apiUrl}/register`, {
     credentials: "same-origin",
     method: "POST",
     headers: {

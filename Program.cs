@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using BiancasBikes.Data;
+using BiancasBikes.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,7 +37,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         };
     });
 
-builder.Services.AddIdentityCore<IdentityUser>(config =>
+builder.Services.AddIdentityCore<UserProfile>(config =>
             {
                 //for demonstration only - change these for other projects
                 config.Password.RequireDigit = false;
@@ -46,7 +47,7 @@ builder.Services.AddIdentityCore<IdentityUser>(config =>
                 config.Password.RequireUppercase = false;
                 config.User.RequireUniqueEmail = true;
             })
-    .AddRoles<IdentityRole>()  //add the role service.  
+    .AddRoles<IdentityRole<int>>()  //add the role service.  
     .AddEntityFrameworkStores<BiancasBikesDbContext>();
 
 // allows passing datetimes without time zone data 
@@ -69,7 +70,6 @@ app.UseHttpsRedirection();
 // these two calls are required to add auth to the pipeline for a request
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

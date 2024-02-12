@@ -4,7 +4,7 @@ using BiancasBikes.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace BiancasBikes.Data;
-public class BiancasBikesDbContext : IdentityDbContext<IdentityUser>
+public class BiancasBikesDbContext : IdentityDbContext<UserProfile, IdentityRole<int>, int>
 {
     private readonly IConfiguration _configuration;
     public DbSet<Bike> Bikes { get; set; }
@@ -22,37 +22,32 @@ public class BiancasBikesDbContext : IdentityDbContext<IdentityUser>
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
+        modelBuilder.Entity<IdentityRole<int>>().HasData(new IdentityRole<int>
         {
-            Id = "c3aaeb97-d2ba-4a53-a521-4eea61e59b35",
+            Id = 1,
             Name = "Admin",
             NormalizedName = "admin"
         });
 
-        modelBuilder.Entity<IdentityUser>().HasData(new IdentityUser
-        {
-            Id = "dbc40bc6-0829-4ac5-a3ed-180f5e916a5f",
-            UserName = "Administrator",
-            Email = "admina@strator.comx",
-            PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null, _configuration["AdminPassword"])
-        });
-
-        modelBuilder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
-        {
-            RoleId = "c3aaeb97-d2ba-4a53-a521-4eea61e59b35",
-            UserId = "dbc40bc6-0829-4ac5-a3ed-180f5e916a5f"
-        });
         modelBuilder.Entity<UserProfile>().HasData(new UserProfile
         {
             Id = 1,
-            IdentityUserId = "dbc40bc6-0829-4ac5-a3ed-180f5e916a5f",
+            UserName = "Administrator",
+            Email = "admina@strator.comx",
             FirstName = "Admina",
             LastName = "Strator",
             Address = "101 Main Street",
+            PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null, _configuration["AdminPassword"])
         });
 
-        modelBuilder.Entity<Owner>().HasData(new Owner[]
+        modelBuilder.Entity<IdentityUserRole<int>>().HasData(new IdentityUserRole<int>
         {
+            RoleId = 1,
+            UserId = 1
+        });
+
+        modelBuilder.Entity<Owner>().HasData(
+        [
             new Owner
             {
                 Id = 1,
@@ -76,15 +71,17 @@ public class BiancasBikesDbContext : IdentityDbContext<IdentityUser>
                 Address="101 First Street",
                 Telephone="555-555-5555"
             },
-        });
-        modelBuilder.Entity<BikeType>().HasData(new BikeType[]
-        {
+        ]);
+
+        modelBuilder.Entity<BikeType>().HasData(
+        [
             new BikeType {Id = 1, Name = "Mountain"},
             new BikeType {Id = 2, Name = "Racing"},
             new BikeType {Id = 3, Name = "Cruiser"},
-        });
-        modelBuilder.Entity<Bike>().HasData(new Bike[]
-        {
+        ]);
+
+        modelBuilder.Entity<Bike>().HasData(
+        [
             new Bike
             {
                 Id = 1,
@@ -117,9 +114,10 @@ public class BiancasBikesDbContext : IdentityDbContext<IdentityUser>
                 OwnerId = 3,
                 BikeTypeId = 1
             },
-        });
-        modelBuilder.Entity<WorkOrder>().HasData(new WorkOrder[]
-        {
+        ]);
+
+        modelBuilder.Entity<WorkOrder>().HasData(
+        [
             new WorkOrder
             {
                 Id = 1,
@@ -136,6 +134,6 @@ public class BiancasBikesDbContext : IdentityDbContext<IdentityUser>
                 DateCompleted = new DateTime(2023, 7, 15),
                 UserProfileId = 1
             }
-        });
+        ]);
     }
 }
