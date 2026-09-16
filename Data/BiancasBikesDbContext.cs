@@ -125,7 +125,8 @@ public class BiancasBikesDbContext : IdentityDbContext<IdentityUser>
                 Id = 1,
                 BikeId = 1,
                 Description = "Flat Tire",
-                DateInitiated = new DateTime(2023, 7, 15)
+                DateInitiated = new DateTime(2023, 7, 15),
+                InitiatedByUserProfileId = 1
             },
             new WorkOrder
             {
@@ -134,7 +135,8 @@ public class BiancasBikesDbContext : IdentityDbContext<IdentityUser>
                 Description = "Bent Fork",
                 DateInitiated = new DateTime(2023, 7, 12),
                 DateCompleted = new DateTime(2023, 7, 15),
-                UserProfileId = 1
+                MechanicUserProfileId = 1,
+                InitiatedByUserProfileId = 1
             }
         });
     }
