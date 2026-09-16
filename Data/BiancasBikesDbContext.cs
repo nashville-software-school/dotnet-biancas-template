@@ -1,9 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using BiancasBikes.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace BiancasBikes.Data;
+
 public class BiancasBikesDbContext : IdentityDbContext<IdentityUser>
 {
     private readonly IConfiguration _configuration;
@@ -16,6 +18,16 @@ public class BiancasBikesDbContext : IdentityDbContext<IdentityUser>
     public BiancasBikesDbContext(DbContextOptions<BiancasBikesDbContext> context, IConfiguration config) : base(context)
     {
         _configuration = config;
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        // The seeded admin IdentityUser's PasswordHash is computed from the
+        // student's own AdminPassword secret using PasswordHasher, which salts
+        // randomly on every call. That makes the computed model "change" on
+        // every design-time build even though nothing about it actually needs
+        // fixing - tell EF Core this particular drift is expected.
+        optionsBuilder.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
