@@ -18,7 +18,7 @@ public class UserProfileController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public IActionResult Get()
     {
         return Ok(_dbContext
