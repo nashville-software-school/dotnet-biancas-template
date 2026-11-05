@@ -26,7 +26,12 @@ public class BiancasBikesDbContext : IdentityDbContext<IdentityUser>
         // student's own AdminPassword secret using PasswordHasher, which salts
         // randomly on every call. That makes the computed model "change" on
         // every design-time build even though nothing about it actually needs
-        // fixing - tell EF Core this particular drift is expected.
+        // fixing - tell EF Core this particular drift is expected. (The seeded
+        // role's and user's ConcurrencyStamp/SecurityStamp would also change on
+        // every build, since their constructors generate new Guids, so those are
+        // given fixed values in OnModelCreating below. The PasswordHash is the
+        // only seeded value that still changes, and it will show up as an
+        // UpdateData in every new migration.)
         optionsBuilder.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
     }
 
@@ -38,7 +43,8 @@ public class BiancasBikesDbContext : IdentityDbContext<IdentityUser>
         {
             Id = "c3aaeb97-d2ba-4a53-a521-4eea61e59b35",
             Name = "Admin",
-            NormalizedName = "admin"
+            NormalizedName = "admin",
+            ConcurrencyStamp = "a6f8b1d2-6c3e-4f7a-9b2d-1e5c8a4f7b90"
         });
 
         modelBuilder.Entity<IdentityUser>().HasData(new IdentityUser
@@ -46,6 +52,8 @@ public class BiancasBikesDbContext : IdentityDbContext<IdentityUser>
             Id = "dbc40bc6-0829-4ac5-a3ed-180f5e916a5f",
             UserName = "Administrator",
             Email = "admina@strator.comx",
+            ConcurrencyStamp = "3d9e7c41-8b2a-4f6d-a1e5-7c0b9f2d4e68",
+            SecurityStamp = "e2b4f6a8-1c3d-4e5f-8a9b-0c1d2e3f4a5b",
             PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null, _configuration["AdminPassword"])
         });
 
