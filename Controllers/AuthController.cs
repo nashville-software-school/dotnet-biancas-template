@@ -71,7 +71,7 @@ public class AuthController : ControllerBase
 
             return new UnauthorizedResult();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return StatusCode(500);
         }
@@ -87,7 +87,7 @@ public class AuthController : ControllerBase
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).Wait();
             return Ok();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return StatusCode(500);
         }
